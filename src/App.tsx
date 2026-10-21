@@ -895,13 +895,23 @@ export default function App() {
 
                 </motion.div>
 
-                {/* Comic Panel Gallery - Women Involvement: Pride of the Nation */}
-                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 mb-2 px-2 text-center">
-                  <div className="h-[1px] w-6 sm:w-12 bg-gradient-to-r from-transparent to-rose-500/50" />
-                  <span className="text-[11px] sm:text-xs md:text-sm font-black uppercase tracking-[0.15em] sm:tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-300 to-cyan-300 font-mono">
-                    ✦ Pride of the Nation: Women Leadership & Bravery ✦
-                  </span>
-                  <div className="h-[1px] w-6 sm:w-12 bg-gradient-to-l from-transparent to-rose-500/50" />
+                {/* Comic Panel Gallery - Women Can Lead & They Are Brave: Tribute to All Women */}
+                <div className="flex flex-col items-center justify-center text-center mt-8 sm:mt-12 mb-6 px-4 max-w-4xl mx-auto space-y-3">
+                  <div className="flex items-center justify-center gap-2 sm:gap-3">
+                    <div className="h-[1px] w-8 sm:w-16 bg-gradient-to-r from-transparent to-rose-400/60" />
+                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-rose-300 font-mono">
+                      ✦ Nari Shakti • The Eternal Torchbearers ✦
+                    </span>
+                    <div className="h-[1px] w-8 sm:w-16 bg-gradient-to-l from-transparent to-rose-400/60" />
+                  </div>
+
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-amber-200 to-cyan-200 leading-tight">
+                    Women Can Lead & They Are Brave — Embracing Every Milestone for Family & Nation
+                  </h3>
+
+                  <p className="text-xs sm:text-sm md:text-base text-rose-100/90 font-serif italic max-w-3xl leading-relaxed drop-shadow-sm">
+                    “A heartfelt, soulful tribute to every woman who fearlessly carves her own identity with unyielding courage and silent sacrifices — forever upholding her family’s honor and our Nation’s pride as her supreme, sacred priority.”
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 w-full max-w-5xl pb-8 sm:pb-12 mt-3 sm:mt-4 px-1">
