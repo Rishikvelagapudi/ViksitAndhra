@@ -204,20 +204,20 @@ export function LiveMonitorTerminal({ onClose }: LiveMonitorTerminalProps) {
       <canvas ref={canvasRef} className="hidden" />
 
       {/* TOP HEADER */}
-      <header className="h-14 border-b border-cyan-500/20 bg-black/90 px-4 flex items-center justify-between z-20 shrink-0 gap-2">
-        <div className="flex items-center gap-3 min-w-0">
+      <header className="min-h-12 sm:h-14 py-2 border-b border-cyan-500/20 bg-black/90 px-3 sm:px-4 flex items-center justify-between z-20 shrink-0 gap-2 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           {onClose && (
             <button 
               onClick={onClose}
-              className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all shrink-0"
+              className="p-1 sm:p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all shrink-0"
               title="Back to Terminal"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           )}
-          <div className="flex items-center gap-2 min-w-0">
-            <Radio className="w-4 h-4 text-red-500 animate-pulse shrink-0" />
-            <span className="font-mono text-[11px] font-black uppercase tracking-widest text-cyan-400 truncate">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500 animate-pulse shrink-0" />
+            <span className="font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-cyan-400 truncate">
               LIVE MONITOR • AI HUD
             </span>
           </div>
@@ -247,11 +247,11 @@ export function LiveMonitorTerminal({ onClose }: LiveMonitorTerminalProps) {
         </div>
 
         {/* FULLSCREEN EXPAND CAMERA TOGGLE */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button 
             onClick={analyzeCurrentFrame}
             disabled={isLiveAnalyzing}
-            className="px-3 py-1 bg-cyan-500 hover:bg-cyan-400 text-black font-black text-[10px] uppercase rounded-lg transition-all flex items-center gap-1.5 disabled:opacity-50"
+            className="px-2.5 sm:px-3 py-1 bg-cyan-500 hover:bg-cyan-400 text-black font-black text-[9px] sm:text-[10px] uppercase rounded-lg transition-all flex items-center gap-1 sm:gap-1.5 disabled:opacity-50"
           >
             {isLiveAnalyzing ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3 fill-black" />}
             <span>{isLiveAnalyzing ? "Scanning..." : "Scan Frame"}</span>
@@ -260,23 +260,23 @@ export function LiveMonitorTerminal({ onClose }: LiveMonitorTerminalProps) {
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
-              "px-3 py-1 rounded-lg font-mono text-[10px] font-bold flex items-center gap-1.5 border transition-all shadow-md",
+              "px-2.5 sm:px-3 py-1 rounded-lg font-mono text-[9px] sm:text-[10px] font-bold flex items-center gap-1 sm:gap-1.5 border transition-all shadow-md",
               isExpanded 
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 hover:bg-amber-500/30" 
                 : "bg-cyan-500/20 border-cyan-500 text-cyan-300 hover:bg-cyan-500/30"
             )}
           >
-            {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            {isExpanded ? <Minimize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
             <span className="hidden sm:inline">{isExpanded ? "EXIT FULLSCREEN" : "EXPAND CAMERA"}</span>
           </button>
         </div>
       </header>
 
       {/* MAIN LAYOUT */}
-      <div className="flex-1 flex overflow-hidden relative">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden relative">
         
         {/* CENTER CAMERA DISPLAY AREA */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-black relative">
+        <div className="w-full lg:flex-1 flex flex-col overflow-hidden bg-black relative min-h-[260px] sm:min-h-[380px] lg:min-h-0 shrink-0 lg:shrink">
           
           <div className="flex-1 relative overflow-hidden flex items-center justify-center p-2 sm:p-4">
             <div className={cn(
@@ -387,7 +387,7 @@ export function LiveMonitorTerminal({ onClose }: LiveMonitorTerminalProps) {
 
         {/* RIGHT SIDEBAR: AI Scene Understanding & Details */}
         {!isExpanded && (
-          <aside className="w-72 bg-black/70 border-l border-cyan-500/20 flex flex-col shrink-0 overflow-y-auto z-10">
+          <aside className="w-full lg:w-72 bg-black/70 border-t lg:border-t-0 lg:border-l border-cyan-500/20 flex flex-col shrink-0 overflow-y-auto z-10 max-h-[50vh] lg:max-h-none">
             
             {/* AI SCENE UNDERSTANDING */}
             <div className="p-3 border-b border-cyan-500/20 bg-cyan-950/30 space-y-2">

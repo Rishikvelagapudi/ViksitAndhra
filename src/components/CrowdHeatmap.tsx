@@ -240,7 +240,7 @@ export function CrowdHeatmap({ occupancyPercent = 35, isLiveFeedActive = false, 
         </div>
 
         {/* Legend bar showing thresholds */}
-        <div className="grid grid-cols-5 gap-1.5 pt-1 text-[9px] font-mono text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1.5 pt-1 text-[9px] font-mono text-center">
           <div className={cn("p-1 rounded border transition-all", currentOccupancy <= 25 ? "bg-emerald-500/30 border-emerald-400 text-emerald-300 font-bold" : "bg-slate-900/60 border-white/5 text-slate-400")}>
             0-25%: Green
           </div>
@@ -253,7 +253,7 @@ export function CrowdHeatmap({ occupancyPercent = 35, isLiveFeedActive = false, 
           <div className={cn("p-1 rounded border transition-all", currentOccupancy > 75 && currentOccupancy <= 90 ? "bg-red-500/30 border-red-400 text-red-300 font-bold" : "bg-slate-900/60 border-white/5 text-slate-400")}>
             76-90%: Red
           </div>
-          <div className={cn("p-1 rounded border transition-all", currentOccupancy > 90 ? "bg-red-950 border-red-600 text-red-200 font-bold animate-pulse" : "bg-slate-900/60 border-white/5 text-slate-400")}>
+          <div className={cn("col-span-2 sm:col-span-1 p-1 rounded border transition-all", currentOccupancy > 90 ? "bg-red-950 border-red-600 text-red-200 font-bold animate-pulse" : "bg-slate-900/60 border-white/5 text-slate-400")}>
             91-100%: Dark Red (&gt;90%)
           </div>
         </div>
@@ -261,14 +261,14 @@ export function CrowdHeatmap({ occupancyPercent = 35, isLiveFeedActive = false, 
 
       {/* 2D SPATIAL HEATMAP GRID BELOW THE CAMERA FEED */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-[11px] font-mono">
+        <div className="flex items-center justify-between text-[11px] font-mono flex-wrap gap-1">
           <span className="text-slate-300 uppercase font-bold flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-cyan-400" /> Sector Heat Map (Physical Camera Field):
           </span>
           <span className="text-slate-400 text-[10px]">12 Monitored Zones</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-2.5">
           {gridSectors.map((sector) => {
             const secColor = getOccupancyColor(sector.occupancy);
             return (
