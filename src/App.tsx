@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Video, X, ShieldAlert, FileText, Activity, Search, AlertTriangle, CheckCircle2, ChevronRight, Play, Download, MessageSquare, Camera, Monitor, Eye, Zap, BrainCircuit, Mic, MicOff, UserPlus, FileCheck, Volume2, UserCircle, Home as HomeIcon, User, Shield, ArrowRight, ArrowLeft, LogOut, IdCard, Loader2, Users, UsersRound, Sparkles, Mail, Gift, PartyPopper, Linkedin, ExternalLink } from 'lucide-react';
+import { Upload, Video, X, ShieldAlert, FileText, Activity, Search, AlertTriangle, CheckCircle2, ChevronRight, Play, Download, MessageSquare, Camera, Monitor, Eye, Zap, BrainCircuit, Mic, MicOff, UserPlus, FileCheck, Volume2, UserCircle, Home as HomeIcon, User, Shield, ArrowRight, ArrowLeft, LogOut, IdCard, Loader2, Users, UsersRound, Sparkles, Mail, Gift, PartyPopper, Linkedin, ExternalLink, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { analyzeVideo, analyzeLiveFrame, processComplaintTurn, generateSpeech, extractIdDetails, analyzeCrowd, askEvidenceQuestion } from './services/geminiService';
 import { InvestigationReport, EmotionalAnalysis, ComplaintData } from './types';
@@ -1858,6 +1858,31 @@ export default function App() {
               </p>
             </div>
 
+            {/* Serverless Upload Notice */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-left max-w-xl mx-auto shadow-lg shadow-amber-500/5 backdrop-blur-md">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <Info className="w-4 h-4 text-amber-400" />
+                </div>
+                <div className="space-y-1">
+                  <p className="font-bold text-amber-300 uppercase tracking-wider text-[11px] sm:text-xs flex items-center gap-2">
+                    <span>Evidence Video Upload Notice</span>
+                    <span className="px-2 py-0.5 text-[9px] bg-amber-400/20 text-amber-200 rounded-full font-mono font-bold">Max ~3.5 MB</span>
+                  </p>
+                  <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
+                    Please upload video clips <strong className="text-amber-200 font-bold">under 3.5 MB</strong> (recommended: short 5–15 second clips in 480p or 720p). This ensures instant processing within serverless limits and rapid forensic reporting.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {error && (
+              <div className="p-3 sm:p-4 bg-red-500/10 border border-red-500/30 rounded-xl sm:rounded-2xl flex items-center gap-3 text-red-300 max-w-xl mx-auto text-left shadow-lg">
+                <AlertTriangle className="w-5 h-5 shrink-0 text-red-400" />
+                <p className="text-xs sm:text-sm">{error}</p>
+              </div>
+            )}
+
             <div 
               onClick={() => fileInputRef.current?.click()}
               className="group relative border-2 border-dashed border-gold/20 rounded-2xl sm:rounded-3xl p-8 sm:p-12 md:p-16 transition-all hover:border-gold/50 hover:bg-gold/5 cursor-pointer overflow-hidden"
@@ -1867,9 +1892,10 @@ export default function App() {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                   <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-gold" />
                 </div>
-                <div>
-                  <p className="text-base sm:text-lg font-medium">Submit Evidence for Analysis</p>
-                  <p className="text-xs sm:text-sm text-white/40">MP4, MOV or AVI (Max 3.5MB for fast serverless AI)</p>
+                <div className="space-y-1">
+                  <p className="text-base sm:text-lg font-medium text-white">Submit Evidence for Analysis</p>
+                  <p className="text-xs sm:text-sm text-amber-300 font-semibold">Recommended: Short clip under 3.5 MB</p>
+                  <p className="text-[11px] text-white/40">MP4, WebM, MOV or AVI formats</p>
                 </div>
               </div>
               <input 
