@@ -377,8 +377,8 @@ export default function App() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 20 * 1024 * 1024) {
-        setError("File size exceeds 20MB limit for this demo.");
+      if (file.size > 3.8 * 1024 * 1024) {
+        setError(`File size is ${(file.size / (1024 * 1024)).toFixed(1)}MB. Vercel serverless has a 4.5MB payload limit. Please upload a short clip under 3.5MB.`);
         return;
       }
       setVideoFile(file);
@@ -1869,7 +1869,7 @@ export default function App() {
                 </div>
                 <div>
                   <p className="text-base sm:text-lg font-medium">Submit Evidence for Analysis</p>
-                  <p className="text-xs sm:text-sm text-white/40">MP4, MOV or AVI (Max 20MB)</p>
+                  <p className="text-xs sm:text-sm text-white/40">MP4, MOV or AVI (Max 3.5MB for fast serverless AI)</p>
                 </div>
               </div>
               <input 

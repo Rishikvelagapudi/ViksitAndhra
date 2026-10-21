@@ -10,6 +10,9 @@ async function callGeminiAPI(action: string, payload: any) {
   });
 
   if (!response.ok) {
+    if (response.status === 413) {
+      throw new Error('Video file is too large for serverless analysis (Vercel 4.5MB limit). Please upload a shorter clip or smaller video under 3.5MB.');
+    }
     const errorData = await response.json().catch(() => ({}));
     let msg = errorData.error || `AI Service Error (${response.status})`;
     try {
