@@ -1,7 +1,39 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-const DEFAULT_MODEL = "gemini-3.5-flash";
-const TTS_MODEL = "gemini-3.8-flash-tts";
+const PRIMARY_MODELS = [
+  "gemini-3.5-flash",
+  "gemini-3.6-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-3.8-flash"
+];
+
+const TTS_MODELS = [
+  "gemini-3.8-flash-tts",
+  "gemini-3.8-flash-lite-tts",
+  "gemini-3.1-flash-tts-preview"
+];
+
+async function generateWithFallback(ai: GoogleGenAI, config: any, models = PRIMARY_MODELS) {
+  let lastErr: any;
+  for (const model of models) {
+    try {
+      return await ai.models.generateContent({
+        ...config,
+        model,
+      });
+    } catch (err: any) {
+      lastErr = err;
+      const errMsg = String(err?.message || '');
+      const isOverloaded = err?.status === 503 || err?.code === 503 || errMsg.includes('503') || errMsg.includes('high demand') || errMsg.includes('UNAVAILABLE') || errMsg.includes('RESOURCE_EXHAUSTED');
+      if (isOverloaded) {
+        console.warn(`Model ${model} experiencing high demand, falling back to next available model...`);
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr;
+}
 
 const safeParseJSON = (text: string | null | undefined) => {
   if (!text) return {};
@@ -50,8 +82,7 @@ export default async function handler(req: any, res: any) {
     switch (action) {
       case 'analyzeVideo': {
         const { videoBase64, mimeType, prompt } = payload;
-        const response = await ai.models.generateContent({
-          model: DEFAULT_MODEL,
+        const response = await generateWithFallback(ai, {
           contents: [
             {
               parts: [
@@ -87,8 +118,7 @@ export default async function handler(req: any, res: any) {
           If the answer is not present in the evidence data, state clearly that the current evidence does not contain this information and refrain from guessing or hallucinating.
         `;
 
-        const response = await ai.models.generateContent({
-          model: DEFAULT_MODEL,
+        const response = await generateWithFallback(ai, {
           contents: [{ parts: [{ text: prompt }] }]
         });
 
@@ -97,8 +127,7 @@ export default async function handler(req: any, res: any) {
 
       case 'extractIdDetails': {
         const { imageBase64, mimeType, prompt } = payload;
-        const response = await ai.models.generateContent({
-          model: DEFAULT_MODEL,
+        const response = await generateWithFallback(ai, {
           contents: [
             {
               parts: [
@@ -122,8 +151,7 @@ export default async function handler(req: any, res: any) {
 
       case 'analyzeLiveFrame': {
         const { imageBase64, prompt } = payload;
-        const response = await ai.models.generateContent({
-          model: DEFAULT_MODEL,
+        const response = await generateWithFallback(ai, {
           contents: [
             {
               parts: [
@@ -147,8 +175,7 @@ export default async function handler(req: any, res: any) {
 
       case 'analyzeCrowd': {
         const { imageBase64, prompt } = payload;
-        const response = await ai.models.generateContent({
-          model: DEFAULT_MODEL,
+        const response = await generateWithFallback(ai, {
           contents: [
             {
               parts: [
@@ -178,8 +205,7 @@ export default async function handler(req: any, res: any) {
           'Child': 'Puck'
         };
 
-        const response = await ai.models.generateContent({
-          model: TTS_MODEL,
+        const response = await generateWithFallback(ai, {
           contents: [{ parts: [{ text }] }],
           config: {
             responseModalities: [Modality.AUDIO],
@@ -189,7 +215,7 @@ export default async function handler(req: any, res: any) {
               },
             },
           },
-        });
+        }, TTS_MODELS);
 
         const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
         return res.status(200).json({ audioData });
@@ -215,8 +241,7 @@ export default async function handler(req: any, res: any) {
           parts.push({ text: "The user just spoke the above audio. Transcribe it and extract information." });
         }
 
-        const response = await ai.models.generateContent({
-          model: DEFAULT_MODEL,
+        const response = await generateWithFallback(ai, {
           contents: [{ parts }],
           config: {
             responseMimeType: "application/json",
@@ -232,6 +257,16 @@ export default async function handler(req: any, res: any) {
     }
   } catch (err: any) {
     console.error(`Vercel Serverless Gemini API error (${action}):`, err);
-    return res.status(500).json({ error: err.message || 'Gemini API Execution Error' });
+    let message = err?.message || 'Gemini API Execution Error';
+    try {
+      const parsed = typeof message === 'string' && message.startsWith('{') ? JSON.parse(message) : null;
+      if (parsed?.error?.message) {
+        message = parsed.error.message;
+      }
+    } catch {}
+    if (message.includes('high demand') || message.includes('UNAVAILABLE') || message.includes('503')) {
+      message = 'Google AI is currently experiencing high demand. Please try again in a few moments.';
+    }
+    return res.status(500).json({ error: message });
   }
 }

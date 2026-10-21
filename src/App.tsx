@@ -410,7 +410,7 @@ export default function App() {
       setReport(result);
     } catch (err: any) {
       console.error(err);
-      setError(`Analysis failed: ${err.message}. Please restart your dev server if you just updated the API key.`);
+      setError(`Analysis error: ${err.message}`);
     } finally {
       setIsAnalyzing(false);
     }

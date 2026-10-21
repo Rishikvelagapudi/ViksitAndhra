@@ -11,7 +11,19 @@ async function callGeminiAPI(action: string, payload: any) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || `AI Service Error (${response.status})`);
+    let msg = errorData.error || `AI Service Error (${response.status})`;
+    try {
+      if (typeof msg === 'string' && msg.trim().startsWith('{')) {
+        const parsed = JSON.parse(msg);
+        if (parsed?.error?.message) {
+          msg = parsed.error.message;
+        }
+      }
+    } catch {}
+    if (msg.includes('high demand') || msg.includes('UNAVAILABLE') || msg.includes('503')) {
+      msg = 'Google AI is currently experiencing momentary high traffic. Please try your request again in a few seconds.';
+    }
+    throw new Error(msg);
   }
 
   return await response.json();
